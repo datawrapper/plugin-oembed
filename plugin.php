@@ -1,6 +1,8 @@
 <?php
 
 class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
+    const GET_PUBLISHED_URL_PATTERN = 'get_published_url_pattern';
+
     /*
      * Register the relevant hooks for this module.
      */
@@ -32,7 +34,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         // Register the standard URLs for the URL patterns
         DatawrapperHooks::register(
-            DatawrapperHooks::GET_PUBLISHED_URL_PATTERN,
+            DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN,
             function() {
                 return 'http[s]?:\/\/' . $GLOBALS['dw_config']['chart_domain'] . '\/(?<id>.+?)([\/](index\.html)?)?';
             }
@@ -51,7 +53,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         $format = $app->request()->get('format');
 
         // Get all the possible patterns for chart urls
-        $results = DatawrapperHooks::execute(DatawrapperHooks::GET_PUBLISHED_URL_PATTERN);
+        $results = DatawrapperHooks::execute(DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN);
 
         // Find the first pattern that matches the current url
         $found = false;
