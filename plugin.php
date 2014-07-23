@@ -42,12 +42,16 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     }
 
     /*
+     * Register chart_oembed.php as a required library so it gets autoloaded
+     */
+    public function getRequiredLibraries() {
+        return array('chart_oembed.php');
+    }
+
+    /*
      * Handle requests to /api/plugin/oembed
      */
     protected function oEmbedEndpoint($app) {
-        // Load the chart_oembed function
-        require_once dirname(__FILE__) . '/chart_oembed.php';
-
         // Get the parameters from the query-parameters
         $url = urldecode($app->request()->get('url'));
         $format = $app->request()->get('format');
@@ -66,8 +70,19 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
                 // group
                 $id = isset($matches['id']) ? $matches['id'] : $matches[1];
 
-                // get the oEmbed response
-                chart_oembed($app, $id, $format);
+                // Check that the chart exists
+                $chart = ChartQuery::create()->findPK($id);
+                if (!$chart) break;
+
+                // Check that the charts author is able to publish
+                $user = $chart->getUser();
+                if (!$user->isAbleToPublish()) break;
+
+                // And check that the chart is public
+                if (!$chart->isPublic()) break;
+
+                // Get the oEmbed response
+                chart_oembed($app, $chart);
 
                 // and signal that we found a url
                 $found = true;
@@ -87,7 +102,8 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     protected function oembedLink($chart) {
         $content = get_chart_content($chart, $chart->getUser(), false, '../');
 
-        $title = strip_tags(str_replace('<br />', ' - ', $chart->getTitle()));          $url = urlencode($content['chartUrl']);
+        $title = strip_tags(str_replace('<br />', ' - ', $chart->getTitle()));
+        $url = urlencode($content['chartUrl']);
 
         echo '<link rel="alternate" type="application/json+oembed" href="' . $content['DW_DOMAIN'] . 'api/plugin/oembed?url=' . $url . '&format=json" title="' . $title . '" />' . "\n";
     }
