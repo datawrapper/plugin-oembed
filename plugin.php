@@ -36,7 +36,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         DatawrapperHooks::register(
             DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN,
             function() {
-                return 'http[s]?:\/\/' . $GLOBALS['dw_config']['chart_domain'] . '\/(?<id>.+?)([\/](index\.html)?)?';
+                return 'http[s]?:\/\/' . $GLOBALS['dw_config']['chart_domain'] . '\/(?<id>.+?)(?:[\/](?:index\.html)?)?';
             }
         );
     }
