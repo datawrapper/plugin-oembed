@@ -173,7 +173,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         $response->type = 'rich';
         $response->version = 1.0;
         $response->provider_name = 'Datawrapper';
-        $response->provider_url = 'http://' . $GLOBALS['dw_config']['chart_domain'];
+        $response->provider_url = 'http://' . $GLOBALS['dw_config']['domain'];
         $response->title = $chart->getTitle();
         $response->html = $html;
         $response->width = $width;
