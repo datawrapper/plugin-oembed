@@ -50,11 +50,11 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         $format = $app->request()->get('format');
 
         // Get all the possible patterns for chart urls
-        $results = DatawrapperHooks::execute(DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN);
+        $patterns = DatawrapperHooks::execute(DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN);
 
         // Find the first pattern that matches the current url
         $found = false;
-        foreach ($results AS $pattern) {
+        foreach ($patterns as $pattern) {
             if (preg_match('/^' . $pattern . '$/', $url, $matches)) {
                 // We have a match.
 
@@ -95,10 +95,10 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     protected function oembedLink($chart) {
         $content = get_chart_content($chart, $chart->getUser(), false, '../');
 
-        $title = strip_tags(str_replace('<br />', ' - ', $chart->getTitle()));
+        $title = htmlspecialchars(strip_tags(str_replace('<br />', ' - ', $chart->getTitle())), ENT_QUOTES, 'UTF-8');
         $url = urlencode($content['chartUrl']);
 
-        echo '<link rel="alternate" type="application/json+oembed" href="' . $content['DW_DOMAIN'] . 'api/plugin/oembed?url=' . $url . '&format=json" title="' . $title . '" />' . "\n";
+        echo '<link rel="alternate" type="application/json+oembed" href="' . $content['DW_DOMAIN'] . 'api/plugin/oembed?url=' . $url . '&amp;format=json" title="' . $title . '" />' . "\n";
     }
 
     /*
