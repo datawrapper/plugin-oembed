@@ -186,7 +186,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         if ($chart->hasPreview()) {
             // The chart has a thumbnail, so send that along as well
-            $local_path = '../../charts/static/' . $chart->getID() . '/m.png';
+            $local_path = $chart->getStaticPath() . '/m.png';
             list($thumb_width, $thumb_height) = getimagesize($local_path);
             $response->thumbnail_url = $chart->thumbUrl();
             $response->thumbnail_height = $thumb_height;
