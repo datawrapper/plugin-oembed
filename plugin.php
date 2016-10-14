@@ -184,15 +184,6 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             $response->author_name = $chart->getUser()->getName();
         }
 
-        if ($chart->hasPreview()) {
-            // The chart has a thumbnail, so send that along as well
-            $local_path = $chart->getStaticPath() . '/m.png';
-            list($thumb_width, $thumb_height) = getimagesize($local_path);
-            $response->thumbnail_url = $chart->thumbUrl();
-            $response->thumbnail_height = $thumb_height;
-            $response->thumbnail_width = $thumb_width;
-        }
-
         // Output the response as a JSON document
         $app->response()->header('Content-Type', 'application/json;charset=utf-8');
         print json_encode($response);
