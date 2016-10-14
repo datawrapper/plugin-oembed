@@ -67,10 +67,6 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
                 $chart = ChartQuery::create()->findPK($id);
                 if (!$chart) break;
 
-                // Check that the charts author is able to publish
-                $user = $chart->getUser();
-                if (!$user->isAbleToPublish()) break;
-
                 // And check that the chart is public
                 if (!$chart->isPublic()) break;
 
