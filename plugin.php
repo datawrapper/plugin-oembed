@@ -40,13 +40,6 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             }
         );
 
-        DatawrapperHooks::register(
-            DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN,
-            function() {
-                return 'http[s]?:\/\/datawrapper.dwcdn.net\/(?<id>.+?)(?:[\/](?:index\.html)?)?';
-            }
-        );
-
     }
 
     /*
@@ -62,25 +55,16 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         // Find the first pattern that matches the current url
         $found = false;
+        $id = "";
+
         foreach ($patterns as $pattern) {
-            if (preg_match('|^' . $pattern . '$|', $url, $matches)) {
+            if (preg_match('/^' . $pattern . '$/', $url, $matches)) {
                 // We have a match.
 
                 // Extract the id. If there is a named capture called 'id', then
                 // use that. Otherwise, assume the id is in the first chapture
                 // group
                 $id = isset($matches['id']) ? $matches['id'] : $matches[1];
-
-                // Check that the chart exists
-                $chart = ChartQuery::create()->findPK($id);
-                if (!$chart) break;
-
-                // And check that the chart is public
-                if (!$chart->isPublic()) break;
-
-                // Get the oEmbed response
-                self::chart_oembed($app, $chart);
-
                 // and signal that we found a url
                 $found = true;
                 break;
@@ -88,9 +72,25 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         }
 
         if (!$found) {
-            // No hook returned something, so return a 404!
-            $app->response()->status(404);
+            $parsedUrl = parse_url($url, PHP_URL_PATH);
+            $id = explode("/", $parsedUrl);
+            
+            if (sizeof($id) > 1) {
+                $id = $id[1];     
+            }
+
+            $found = true;
         }
+
+        // Check that the chart exists
+        $chart = ChartQuery::create()->findPK($id);
+        if (!$chart) return ;
+
+        // And check that the chart is public
+        if (!$chart->isPublic()) return;
+
+        // Get the oEmbed response
+        self::chart_oembed($app, $chart);
     }
 
     /*
@@ -171,6 +171,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
                   'msallowfullscreen="msallowfullscreen" ' .
                   'width="' . $width . '" height="' . $height . '">' .
                 '</iframe>';
+
 
         // Build the oEmbed document
         $response = new stdClass();
