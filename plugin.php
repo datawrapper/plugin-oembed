@@ -39,6 +39,14 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
                 return 'http[s]?:\/\/' . $GLOBALS['dw_config']['chart_domain'] . '\/(?<id>.+?)(?:[\/](?:index\.html)?)?';
             }
         );
+
+        DatawrapperHooks::register(
+            DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN,
+            function() {
+                return 'http[s]?:\/\/datawrapper.dwcdn.net\/(?<id>.+?)(?:[\/](?:index\.html)?)?';
+            }
+        );
+
     }
 
     /*
@@ -55,7 +63,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // Find the first pattern that matches the current url
         $found = false;
         foreach ($patterns as $pattern) {
-            if (preg_match('/^' . $pattern . '$/', $url, $matches)) {
+            if (preg_match('|^' . $pattern . '$|', $url, $matches)) {
                 // We have a match.
 
                 // Extract the id. If there is a named capture called 'id', then
