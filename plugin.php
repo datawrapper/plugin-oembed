@@ -58,7 +58,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         $id = "";
 
         foreach ($patterns as $pattern) {
-            if (preg_match('/^' . $pattern . '$/', $url, $matches)) {
+            if (preg_match('|^' . $pattern . '$|', $url, $matches)) {
                 // We have a match.
 
                 // Extract the id. If there is a named capture called 'id', then
