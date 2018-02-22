@@ -163,7 +163,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // Generate the iframe to embed the chart
         list($height, $width) = $dimentions;
         $html = '<iframe src="' . $url . '" frameborder="0" ' .
-                  'id="datawrapper-chart' . $chart->getId() . '" ' .
+                  'id="datawrapper-chart-' . $chart->getId() . '" ' .
                   'allowtransparency="true" ' .
                   'allowfullscreen="allowfullscreen" ' .
                   'webkitallowfullscreen="webkitallowfullscreen" ' .
