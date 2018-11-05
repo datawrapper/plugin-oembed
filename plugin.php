@@ -165,12 +165,8 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         $html = '<iframe src="' . $url . '" frameborder="0" ' .
                   'id="datawrapper-chart-' . $chart->getId() . '" ' .
                   'allowtransparency="true" ' .
-                  'allowfullscreen="allowfullscreen" ' .
-                  'webkitallowfullscreen="webkitallowfullscreen" ' .
-                  'mozallowfullscreen="mozallowfullscreen" ' .
-                  'oallowfullscreen="oallowfullscreen" ' .
-                  'msallowfullscreen="msallowfullscreen" ' .
-                  'width="' . $width . '" height="' . $height . '">' .
+                  'scrolling="no" style="width: 0; min-width: 100% !important;" ' .
+                  'height="' . $height . '">' .
                 '</iframe>';
 
 
