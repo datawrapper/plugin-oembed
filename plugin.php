@@ -74,9 +74,9 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         if (!$found) {
             $parsedUrl = parse_url($url, PHP_URL_PATH);
             $id = explode("/", $parsedUrl);
-            
+
             if (sizeof($id) > 1) {
-                $id = $id[1];     
+                $id = $id[1];
             }
 
             $found = true;
@@ -162,11 +162,16 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         // Generate the iframe to embed the chart
         list($height, $width) = $dimentions;
-        $html = '<iframe src="' . $url . '" frameborder="0" ' .
-                  'id="datawrapper-chart-' . $chart->getId() . '" ' .
-                  'scrolling="no" style="width: 0; min-width: 100% !important;" ' .
-                  'height="' . $height . '">' .
-                '</iframe>';
+
+        if (!empty($chart->getMetadata("publish.embed-codes.embed-method-custom"))) {
+            $html = $chart->getMetadata("publish.embed-codes.embed-method-custom");
+        } else {
+            $html = '<iframe src="' . $url . '" frameborder="0" ' .
+                      'id="datawrapper-chart-' . $chart->getId() . '" ' .
+                      'scrolling="no" style="width: 0; min-width: 100% !important;" ' .
+                      'height="' . $height . '">' .
+                    '</iframe>';
+        }
 
 
         // Build the oEmbed document
