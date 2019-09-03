@@ -163,8 +163,8 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // Generate the iframe to embed the chart
         list($height, $width) = $dimentions;
 
-        if (!empty($chart->getMetadata("publish.embed-codes.embed-method-custom"))) {
-            $html = $chart->getMetadata("publish.embed-codes.embed-method-custom");
+        if (!empty($chart->getMetadata("publish.embed-codes.embed-method-responsive"))) {
+            $html = $chart->getMetadata("publish.embed-codes.embed-method-responsive");
         } else {
             $html = '<iframe src="' . $url . '" frameborder="0" ' .
                       'id="datawrapper-chart-' . $chart->getId() . '" ' .
