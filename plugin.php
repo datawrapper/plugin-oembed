@@ -163,7 +163,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // Generate the iframe to embed the chart
         list($height, $width) = $dimentions;
 
-        if (!empty($chart->getMetadata("publish.embed-codes.embed-method-responsive"))) {
+        if (!empty($chart->getMetadata("publish.embed-codes.embed-method-responsive")) && !$app->request()->get('iframe')) {
             $html = $chart->getMetadata("publish.embed-codes.embed-method-responsive");
         } else {
             $html = '<iframe src="' . $url . '" frameborder="0" ' .
