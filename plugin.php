@@ -90,10 +90,10 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         // Check that the chart exists
         $chart = ChartQuery::create()->findPK($id);
-        if (!$chart) return ;
+        if (!$chart) return error(404, 'chart not found');
 
         // And check that the chart is public
-        if (!$chart->isPublic()) return;
+        if (!$chart->isPublic()) return error(404, 'chart not found');;
 
         // Get the oEmbed response
         self::chart_oembed($app, $chart);
