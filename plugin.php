@@ -97,6 +97,11 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // And check that the chart is public
         if (!$chart->isPublic()) return self::error(404, 'chart not found');;
 
+        // make sure that the public url matches the requested url
+        $urlHost = parse_url($url, PHP_URL_HOST);
+        $chartHost = parse_url($chart->getPublicUrl(), PHP_URL_HOST);
+        if ($urlHost != $chartHost) return self::error(404, 'chart not found');
+
         // Get the oEmbed response
         self::chart_oembed($app, $chart);
     }
