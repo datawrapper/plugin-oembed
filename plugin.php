@@ -78,11 +78,12 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             $parsedUrl = parse_url($url, PHP_URL_PATH);
             $id = explode("/", $parsedUrl);
 
-            if (sizeof($id) > 1) {
+            if (sizeof($id) > 1 && strlen($id[1]) == 5) {
                 $id = $id[1];
+                $found = true;
             }
+        }
 
-            $found = true;
         }
 
         // Check that the chart exists
