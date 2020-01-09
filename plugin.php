@@ -210,7 +210,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
     protected static function error($code, $message) {
         global $app;
-        $app->response()->status(501);
+        $app->response()->status($code);
         $app->response()->header('Content-Type', 'application/json;charset=utf-8');
         print json_encode(['error' => $message]);
     }
