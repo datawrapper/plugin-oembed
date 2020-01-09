@@ -84,6 +84,8 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             }
         }
 
+        if (!$found) {
+            return error(400, 'this doesn\'t look like a datawrapper chart url');
         }
 
         // Check that the chart exists
