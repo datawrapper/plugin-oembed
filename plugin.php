@@ -48,6 +48,9 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     protected function oEmbedEndpoint($app) {
         // Get the parameters from the query-parameters
         $url = urldecode($app->request()->get('url'));
+        if (empty($url)) {
+            return error(400, 'you need to pass a url parameter');
+        }
         $format = $app->request()->get('format');
 
         // Get all the possible patterns for chart urls
