@@ -24,14 +24,6 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             }
         );
 
-        // Register the oEmbed-link handler for the chart-head
-        DatawrapperHooks::register(
-            DatawrapperHooks::CHART_HTML_HEAD,
-            function($chart) use ($plugin) {
-                $plugin->oembedLink($chart);
-            }
-        );
-
         // Register the standard URLs for the URL patterns
         DatawrapperHooks::register(
             DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN,
