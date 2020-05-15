@@ -1,0 +1,17 @@
+{
+  "name": "oembed",
+  "version": "1.0.0",
+  "description": "This plugin adds oEmbed functionality to Datawrapper. The API-endpoint will be `/api/plugin/oembed`. Any charts published after the installation of this plugin will have a oEmbed-discovery link inserted in the head of the charts html.",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/joi": "^17.1.1",
+    "lodash": "^4.17.15"
+  }
+}
