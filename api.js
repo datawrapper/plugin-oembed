@@ -32,9 +32,7 @@ module.exports = {
             options: {
                 validate: {
                     query: Joi.object({
-                        format: Joi.string()
-                            .valid('json')
-                            .default('json'),
+                        format: Joi.string().valid('json').default('json'),
                         url: Joi.string()
                             .required()
                             .uri({
@@ -116,9 +114,7 @@ module.exports = {
                     html = embedCodes['embed-method-responsive'];
                 } else {
                     // iframe embedding
-                    html = `<iframe src="${publicURL}" frameborder="0" id="datawrapper-chart-${
-                        chart.id
-                    }" scrolling="no" height="${height}" style="width: 0; min-width: 100% !important;" ></iframe>`;
+                    html = `<iframe src="${publicURL}" frameborder="0" id="datawrapper-chart-${chart.id}" scrolling="no" height="${height}" style="width: 0; min-width: 100% !important;" ></iframe>`;
                 }
 
                 return {
