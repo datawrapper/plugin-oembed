@@ -98,12 +98,12 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     }
 
     /*
-     * Helper function: Can ensure that the dimentions of a chart are bounding
+     * Helper function: Can ensure that the dimensions of a chart are bounding
      * to fit inside a smaller bounding-box.
-     * This function is inspired by `image_dimentions_scale` from Drupal 7.x
+     * This function is inspired by `image_dimensions_scale` from Drupal 7.x
      */
-    protected static function _dimention_bounding($dimentions, $bounding) {
-        list($height, $width) = $dimentions;
+    protected static function _dimension_bounding($dimensions, $bounding) {
+        list($height, $width) = $dimensions;
         list($maxheight, $maxwidth) = $bounding;
         $aspect = $height / $width;
 
@@ -137,7 +137,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
 
         $metadata = $chart->getMetadata();
         $url = $chart->getPublicUrl();
-        $dimentions = array(
+        $dimensions = array(
             $metadata['publish']['embed-height'],
             $metadata['publish']['embed-width'],
         );
@@ -149,11 +149,11 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
                 (int) $app->request()->get('maxheight'),
                 (int) $app->request()->get('maxwidth'),
             );
-            $dimentions = self::_dimention_bounding($dimentions, $bounding);
+            $dimensions = self::_dimension_bounding($dimensions, $bounding);
         }
 
         // Generate the iframe to embed the chart
-        list($height, $width) = $dimentions;
+        list($height, $width) = $dimensions;
 
         if (!empty($chart->getMetadata("publish.embed-codes.embed-method-responsive")) && !$app->request()->get('iframe')) {
             $html = $chart->getMetadata("publish.embed-codes.embed-method-responsive");
