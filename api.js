@@ -106,8 +106,7 @@ module.exports = {
                     }
                 }
 
-                const embedCodes = get(chart, 'metadata.publish.embed-width');
-
+                const embedCodes = get(chart, 'metadata.publish.embed-codes');
                 let html;
 
                 if (embedCodes['embed-method-responsive'] && !(iframe || iframe === '')) {
