@@ -18,12 +18,7 @@ module.exports = {
         // register new event type
         event.GET_PUBLISHED_URL_PATTERN = 'GET_PUBLISHED_URL_PATTERN';
 
-        // Register the standard URLs for the URL patterns
         const { chartDomain } = server.methods.config('general');
-        events.on(
-            event.GET_PUBLISHED_URL_PATTERN,
-            () => `http[s]?://${chartDomain}/(?<id>[a-zA-Z0-9]+)(?:/[0-9]+)?(?:/(?:index.html)?)?`
-        );
 
         // Register the API endpoint
         server.route({
@@ -50,18 +45,32 @@ module.exports = {
                 const { url, iframe } = request.query;
                 let { maxwidth, maxheight } = request.query;
 
-                // Get all the possible patterns for chart urls
-                const patterns = await events.emit(
-                    event.GET_PUBLISHED_URL_PATTERN,
-                    {},
-                    { filter: 'success' }
-                );
+                function testPatterns(patterns) {
+                    // Find the first pattern that matches the current url
+                    for (let i = 0; i < patterns.length; i++) {
+                        const match = new RegExp(patterns[i]).exec(url);
+                        if (match) return match;
+                    }
+                    return false;
+                }
 
-                // Find the first pattern that matches the current url
-                let match;
-                for (let i = 0; i < patterns.length; i++) {
-                    match = new RegExp(patterns[i]).exec(url);
-                    if (match) break;
+                // Check the standard URL pattern first
+                let patterns = [
+                    `http[s]?://${chartDomain}/(?<id>[a-zA-Z0-9]+)(?:/[0-9]+)?(?:/(?:index.html)?)?`
+                ];
+
+                let match = testPatterns(patterns);
+
+                if (!match) {
+                    // Not a standard URL, let's check for self-hosted charts
+                    // Get all the possible patterns for chart urls
+                    patterns = await events.emit(
+                        event.GET_PUBLISHED_URL_PATTERN,
+                        {},
+                        { filter: 'success' }
+                    );
+
+                    match = testPatterns(patterns);
                 }
 
                 if (!match) return Boom.notFound();
