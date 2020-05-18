@@ -1,6 +1,7 @@
 const Joi = require('@hapi/joi');
 const Boom = require('@hapi/boom');
 const get = require('lodash/get');
+const flatten = require('lodash/flatten');
 
 module.exports = {
     name: '@datawrapper/plugin-oembed',
@@ -46,6 +47,9 @@ module.exports = {
                 let { maxwidth, maxheight } = request.query;
 
                 function testPatterns(patterns) {
+                    // we need to flatten in case a single event
+                    // listener returned multiple patterns
+                    patterns = flatten(patterns);
                     // Find the first pattern that matches the current url
                     for (let i = 0; i < patterns.length; i++) {
                         const match = new RegExp(patterns[i]).exec(url);
@@ -79,6 +83,8 @@ module.exports = {
                 // use that. Otherwise, assume the id is in the first chapture
                 // group
                 const chartId = match.groups && match.groups.id ? match.groups.id : match[1];
+
+                if (!chartId) return Boom.notFound();
 
                 // Check that the chart exists and is public
                 const chart = await Chart.findOne({
