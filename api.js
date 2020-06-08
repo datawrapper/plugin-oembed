@@ -19,7 +19,8 @@ module.exports = {
         // register new event type
         event.GET_PUBLISHED_URL_PATTERN = 'GET_PUBLISHED_URL_PATTERN';
 
-        const { chartDomain } = server.methods.config('general');
+        const cloudConfig = server.methods.config('plugins')['publish-cloud'];
+        const chartDomain = cloudConfig ? cloudConfig.hostname : false;
 
         // Register the API endpoint
         server.route({
@@ -58,12 +59,17 @@ module.exports = {
                     return false;
                 }
 
-                // Check the standard URL pattern first
-                let patterns = [
-                    `http[s]?://${chartDomain}/(?<id>[a-zA-Z0-9]+)(?:/[0-9]+)?(?:/(?:index.html)?)?`
-                ];
+                let patterns;
+                let match = false;
 
-                let match = testPatterns(patterns);
+                if (chartDomain) {
+                    // Check the standard URL pattern first
+                    patterns = [
+                        `http[s]?://${chartDomain}/(?<id>[a-zA-Z0-9]+)(?:/[0-9]+)?(?:/(?:index.html)?)?`
+                    ];
+
+                    match = testPatterns(patterns);
+                }
 
                 if (!match) {
                     // Not a standard URL, let's check for self-hosted charts
