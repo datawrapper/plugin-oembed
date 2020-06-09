@@ -27,6 +27,7 @@ module.exports = {
             path: '/',
             method: 'GET',
             options: {
+                auth: false,
                 validate: {
                     query: Joi.object({
                         format: Joi.string().valid('json').default('json'),
@@ -127,7 +128,7 @@ module.exports = {
                     }
                 }
 
-                const embedCodes = get(chart, 'metadata.publish.embed-codes');
+                const embedCodes = get(chart, 'metadata.publish.embed-codes', {});
                 let html;
 
                 if (embedCodes['embed-method-responsive'] && !(iframe || iframe === '')) {
