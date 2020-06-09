@@ -40,7 +40,7 @@ module.exports = {
                         maxwidth: Joi.number(),
                         maxheight: Joi.number(),
                         iframe: Joi.boolean().allow('')
-                    })
+                    }).unknown()
                 }
             },
             handler: async (request, h) => {
