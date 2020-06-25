@@ -45,13 +45,26 @@ module.exports = {
                             .description(
                                 'The URL of the Datawrapper visualization you want to retreive embedding information'
                             ),
-                        maxwidth: Joi.number().description(
-                            'The maximum width of the embedded visualization'
-                        ),
-                        maxheight: Joi.number().description(
-                            'The maximum height of the embedded visualization'
-                        ),
+                        maxwidth: Joi.number()
+                            .integer()
+                            .description('The maximum width of the embedded visualization'),
+                        maxheight: Joi.number()
+                            .integer()
+                            .description('The maximum height of the embedded visualization'),
                         iframe: Joi.boolean().allow('').description('Force iframe-only embedding')
+                    }).unknown()
+                },
+                response: {
+                    sample: 0,
+                    schema: Joi.object({
+                        type: Joi.string(),
+                        version: Joi.string(),
+                        provider_name: Joi.string(),
+                        provider_url: Joi.string(),
+                        title: Joi.string(),
+                        html: Joi.string(),
+                        width: Joi.number().integer(),
+                        height: Joi.number().integer()
                     }).unknown()
                 }
             },
