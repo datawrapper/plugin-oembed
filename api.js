@@ -29,18 +29,29 @@ module.exports = {
             options: {
                 tags: ['api'],
                 auth: false,
+                description: 'Retreive embedding information about a Datawrapper visualization.',
                 validate: {
                     query: Joi.object({
-                        format: Joi.string().valid('json').default('json'),
+                        format: Joi.string()
+                            .valid('json')
+                            .default('json')
+                            .description('The response format. Currenly only JSON is supported.'),
                         url: Joi.string()
                             .required()
                             .uri({
                                 scheme: ['http', 'https'],
                                 allowRelative: false
-                            }),
-                        maxwidth: Joi.number(),
-                        maxheight: Joi.number(),
-                        iframe: Joi.boolean().allow('')
+                            })
+                            .description(
+                                'The URL of the Datawrapper visualization you want to retreive embedding information'
+                            ),
+                        maxwidth: Joi.number().description(
+                            'The maximum width of the embedded visualization'
+                        ),
+                        maxheight: Joi.number().description(
+                            'The maximum height of the embedded visualization'
+                        ),
+                        iframe: Joi.boolean().allow('').description('Force iframe-only embedding')
                     }).unknown()
                 }
             },
