@@ -29,7 +29,9 @@ module.exports = {
             options: {
                 tags: ['api'],
                 auth: false,
-                description: 'Retreive embedding information about a Datawrapper visualization.',
+                description: 'Get oEmbed information',
+                notes:
+                    'Retreive embedding information about a Datawrapper visualization. See our [oEmbed tutorial](https://developer.datawrapper.de/docs/embedding-charts-via-oembed) and the official [oEmbed specification](https://oembed.com/) for more information.',
                 validate: {
                     query: Joi.object({
                         format: Joi.string()
