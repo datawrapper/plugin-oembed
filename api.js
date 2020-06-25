@@ -22,6 +22,9 @@ module.exports = {
         const cloudConfig = server.methods.config('plugins')['publish-cloud'];
         const chartDomain = cloudConfig ? cloudConfig.hostname : false;
 
+        const api = server.methods.config('api');
+        const apiDomain = api.subdomain ? `${api.subdomain}.${api.domain}` : api.domain;
+
         // Register the API endpoint
         server.route({
             path: '/',
@@ -177,5 +180,15 @@ module.exports = {
                 };
             }
         });
+
+        if (event.CHART_AFTER_HEAD_HTML) {
+            events.on(event.CHART_AFTER_HEAD_HTML, async ({ chart, publish }) => {
+                if (publish) {
+                    return `<link rel="alternate" type="application/json+oembed"
+      href="https://${apiDomain}/v3/oembed?url=${chart.public_url}&format=json"
+      title="oEmbed" />`;
+                }
+            });
+        }
     }
 };
