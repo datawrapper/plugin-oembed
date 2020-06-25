@@ -27,6 +27,7 @@ module.exports = {
             path: '/',
             method: 'GET',
             options: {
+                tags: ['api'],
                 auth: false,
                 validate: {
                     query: Joi.object({
