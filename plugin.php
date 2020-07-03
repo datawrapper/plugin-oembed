@@ -40,7 +40,12 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
     protected function oEmbedEndpoint($app) {
         // Get the parameters from the query-parameters
         $url = urldecode($app->request()->get('url'));
-        $format = $app->request()->get('format');
+        if (empty($url)) {
+            return self::error(400, "missing parameter 'url'");
+        }
+        if (empty($app->request()->get('format'))) {
+            return self::error(400, "missing parameter 'format'");
+        }
 
         // Get all the possible patterns for chart urls
         $patterns = DatawrapperHooks::execute(DatawrapperPlugin_Oembed::GET_PUBLISHED_URL_PATTERN);
@@ -67,19 +72,27 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
             $parsedUrl = parse_url($url, PHP_URL_PATH);
             $id = explode("/", $parsedUrl);
 
-            if (sizeof($id) > 1) {
+            if (sizeof($id) > 1 && strlen($id[1]) == 5) {
                 $id = $id[1];
+                $found = true;
             }
+        }
 
-            $found = true;
+        if (!$found) {
+            return self::error(400, 'this doesn\'t look like a datawrapper chart url');
         }
 
         // Check that the chart exists
         $chart = ChartQuery::create()->findPK($id);
-        if (!$chart) return ;
+        if (!$chart) return self::error(404, 'chart not found');
 
         // And check that the chart is public
-        if (!$chart->isPublic()) return;
+        if (!$chart->isPublic()) return self::error(404, 'chart not found');;
+
+        // make sure that the public url matches the requested url
+        $urlHost = parse_url($url, PHP_URL_HOST);
+        $chartHost = parse_url($chart->getPublicUrl(), PHP_URL_HOST);
+        if ($urlHost != $chartHost) return self::error(404, 'chart not found');
 
         // Get the oEmbed response
         self::chart_oembed($app, $chart);
@@ -132,7 +145,7 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         if ($app->request()->get('format') != 'json') {
             // We currently don't support anything but JSON responses, so we return
             // a 501 Not Implemented.
-            return $app->response()->status(501);
+            return self::error(501, 'we only support json format');
         }
 
         $metadata = $chart->getMetadata();
@@ -185,6 +198,13 @@ class DatawrapperPlugin_Oembed extends DatawrapperPlugin {
         // Output the response as a JSON document
         $app->response()->header('Content-Type', 'application/json;charset=utf-8');
         print json_encode($response);
+    }
+
+    protected static function error($code, $message) {
+        global $app;
+        $app->response()->status($code);
+        $app->response()->header('Content-Type', 'application/json;charset=utf-8');
+        print json_encode(['error' => $message]);
     }
 
 }
