@@ -16,8 +16,9 @@ module.exports = {
         const { models } = options;
         const { Chart } = models;
 
-        // register new event type
+        // register new event types
         event.GET_PUBLISHED_URL_PATTERN = 'GET_PUBLISHED_URL_PATTERN';
+        event.GET_NEXT_PUBLIC_URL = 'GET_NEXT_PUBLIC_URL';
 
         const cloudConfig = server.methods.config('plugins')['publish-cloud'];
         const chartDomain = cloudConfig ? cloudConfig.hostname : false;
@@ -184,8 +185,13 @@ module.exports = {
         if (event.CHART_AFTER_HEAD_HTML) {
             events.on(event.CHART_AFTER_HEAD_HTML, async ({ chart, publish }) => {
                 if (publish) {
+                    const publicUrl = await events.emit(
+                        event.GET_NEXT_PUBLIC_URL,
+                        {chart},
+                        { filter: 'first' }
+                    );
                     return `<link rel="alternate" type="application/json+oembed"
-      href="https://${apiDomain}/v3/oembed?url=${chart.public_url}&format=json"
+      href="https://${apiDomain}/v3/oembed?url=${publicUrl}&format=json"
       title="oEmbed" />`;
                 }
             });
