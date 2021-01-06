@@ -187,7 +187,8 @@ module.exports = {
                 if (publish) {
                     const publicUrl = await events.emit(
                         event.GET_NEXT_PUBLIC_URL,
-                        {chart}
+                        {chart},
+                        { filter: 'first' }
                     );
                     return `<link rel="alternate" type="application/json+oembed"
       href="https://${apiDomain}/v3/oembed?url=${publicUrl}&format=json"
