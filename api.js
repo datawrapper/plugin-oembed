@@ -16,8 +16,9 @@ module.exports = {
         const { models } = options;
         const { Chart } = models;
 
-        // register new event type
+        // register new event types
         event.GET_PUBLISHED_URL_PATTERN = 'GET_PUBLISHED_URL_PATTERN';
+        event.GET_NEXT_PUBLIC_URL = 'GET_NEXT_PUBLIC_URL';
 
         const cloudConfig = server.methods.config('plugins')['publish-cloud'];
         const chartDomain = cloudConfig ? cloudConfig.hostname : false;
