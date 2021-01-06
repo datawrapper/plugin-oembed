@@ -189,7 +189,7 @@ module.exports = {
                         event.GET_NEXT_PUBLIC_URL,
                         {chart},
                         { filter: 'first' }
-                    );
+                    )[0];
                     return `<link rel="alternate" type="application/json+oembed"
       href="https://${apiDomain}/v3/oembed?url=${publicUrl}&format=json"
       title="oEmbed" />`;
