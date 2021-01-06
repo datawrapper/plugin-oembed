@@ -184,8 +184,12 @@ module.exports = {
         if (event.CHART_AFTER_HEAD_HTML) {
             events.on(event.CHART_AFTER_HEAD_HTML, async ({ chart, publish }) => {
                 if (publish) {
+                    const publicUrl = await events.emit(
+                        event.GET_NEXT_PUBLIC_URL,
+                        {chart}
+                    );
                     return `<link rel="alternate" type="application/json+oembed"
-      href="https://${apiDomain}/v3/oembed?url=${chart.public_url}&format=json"
+      href="https://${apiDomain}/v3/oembed?url=${publicUrl}&format=json"
       title="oEmbed" />`;
                 }
             });
