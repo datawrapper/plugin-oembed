@@ -18,7 +18,6 @@ module.exports = {
 
         // register new event types
         event.GET_PUBLISHED_URL_PATTERN = 'GET_PUBLISHED_URL_PATTERN';
-        event.GET_NEXT_PUBLIC_URL = 'GET_NEXT_PUBLIC_URL';
 
         const cloudConfig = server.methods.config('plugins')['publish-cloud'];
         const chartDomain = cloudConfig ? cloudConfig.hostname : false;
@@ -187,7 +186,7 @@ module.exports = {
                 if (publish) {
                     const publicUrl = await events.emit(
                         event.GET_NEXT_PUBLIC_URL,
-                        {chart},
+                        { chart },
                         { filter: 'first' }
                     );
                     return `<link rel="alternate" type="application/json+oembed"
