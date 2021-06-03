@@ -4,17 +4,30 @@
     "description": "This plugin adds oEmbed functionality to Datawrapper. The API-endpoint will be `/api/plugin/oembed`. Any charts published after the installation of this plugin will have a oEmbed-discovery link inserted in the head of the charts html.",
     "keywords": [],
     "license": "ISC",
-    "author": "",
+    "author": "Datawrapper GmbH",
     "main": "api.js",
     "scripts": {
         "format": "prettier 'api.js' --write",
         "lint": "prettier --check 'api.js' && healthier 'api.js'",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:datawrapper/plugin-oembed.git"
+    },
     "dependencies": {
         "@hapi/boom": "^9.1.0",
-        "@hapi/joi": "^17.1.1",
         "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.1.0",
+        "healthier": "^3.3.0",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.2",
+        "prettier": "^2.0.5"
+    },
+    "peerDependencies": {
+        "joi": "17.x"
     },
     "lint-staged": {
         "*.js": [
@@ -56,12 +69,5 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
-    },
-    "devDependencies": {
-        "babel-eslint": "^10.1.0",
-        "healthier": "^3.3.0",
-        "husky": "^4.2.5",
-        "lint-staged": "^10.2.2",
-        "prettier": "^2.0.5"
     }
 }
